@@ -9,7 +9,6 @@ services:
       - maria_db
     links:
       - maria_db:app_db
-    #command: sh -c './wait-for maria_db:3306 -- npm start'
   maria_db:
     image: "mariadb:10.9"
     restart: always

@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS UTILISATEUR
    TYPE CHAR(32) NULL  
    , PRIMARY KEY (ID_UTILISATEUR) 
  ) 
- comment = "";
+ comment = '';
 
 # -----------------------------------------------------------------------------
 #       TABLE : PHOTOJOURNALIERE
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS PHOTOJOURNALIERE
    DATEJOUR DATE NULL  
    , PRIMARY KEY (ID_PHOTO) 
  ) 
- comment = "";
+ comment = '';
 
 # -----------------------------------------------------------------------------
 #       INDEX DE LA TABLE PHOTOJOURNALIERE
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS PLANTE
    PHOTOGENERIC VARCHAR(128) NULL  
    , PRIMARY KEY (ID_PLANTE) 
  ) 
- comment = "";
+ comment = '';
 
 # -----------------------------------------------------------------------------
 #       TABLE : CONTRAT
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS CONTRAT
    ID_BOTANISTE INTEGER(2) NOT NULL  
    , PRIMARY KEY (ID_CONTRAT) 
  ) 
- comment = "";
+ comment = '';
 
 # -----------------------------------------------------------------------------
 #       INDEX DE LA TABLE CONTRAT
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS PLANTEAGARDER
    QUANTITE INTEGER(2) NULL  
    , PRIMARY KEY (ID_PLANTEAGARDER) 
  ) 
- comment = "";
+ comment = '';
 
 # -----------------------------------------------------------------------------
 #       INDEX DE LA TABLE PLANTEAGARDER
