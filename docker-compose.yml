@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  api_service:
+    build: .
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - maria_db
+    links:
+      - maria_db:app_db
+    #command: sh -c './wait-for maria_db:3306 -- npm start'
+  maria_db:
+    image: "mariadb:10.9"
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MARIADB_DATABASE: A_ROSA_JE
+      MARIADB_USER: Admin
+      MARIADB_PASSWORD: admin
+      MARIADB_ROOT_PASSWORD: mypass
+    volumes:
+      - db:/var/lib/mysql
+      - ./ScriptBDDMSPR.sql:/docker-entrypoint-initdb.d/schema.sql
+
+volumes:
+  db:
