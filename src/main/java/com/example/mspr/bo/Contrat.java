@@ -30,6 +30,13 @@ public class Contrat {
     @JoinColumn(name = "ID_BOTANISTE")
     private Utilisateur botaniste;
 
+    /**
+     * Different etat d'un contrat
+     * S : Sans Botanique mais sans urgence
+     * U : Sans Botanique mais avec urgence
+     * B : Avec Botanique
+     * T : Contrat terminé
+     */
     @Column(name = "ETAT", nullable = false)
     private Character etat;
 
