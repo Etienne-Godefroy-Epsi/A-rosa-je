@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "TYPE")
+@DiscriminatorColumn(name = "TYPE", length = 1)
 @Table(name = "UTILISATEUR")
 public class Utilisateur {
     @Id
@@ -30,7 +30,6 @@ public class Utilisateur {
     @Lob
     @Column(name = "DESCRIPTION")
     private String description;
-
 
     public Integer getId() {
         return id;
