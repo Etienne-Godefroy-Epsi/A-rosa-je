@@ -1,22 +1,83 @@
 package com.example.mspr;
 
+import com.example.mspr.Repository.ContratRepository;
+import com.example.mspr.Repository.PlanteAGarderRepository;
+import com.example.mspr.Repository.PlanteRepository;
+import com.example.mspr.Repository.UtilisateurRepository;
+import com.example.mspr.bo.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-@SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
-@RestController
-public class MsprApplication {
+import java.time.LocalDate;
+
+@SpringBootApplication()
+public class MsprApplication implements CommandLineRunner {
+
+    @Autowired
+    private UtilisateurRepository utilisateurRepository;
+    @Autowired
+    private ContratRepository contratRepository;
+    @Autowired
+    private PlanteRepository planteRepository;
+    @Autowired
+    private PlanteAGarderRepository planteAGarderRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(MsprApplication.class, args);
     }
 
-    @GetMapping("/hello")
-    public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-        return String.format("Hello %s!", name);
+    @Override
+    public void run(String... args) {
+
+        Client client = new Client();
+        client.setAdresse("szfdsdf");
+        client.setEmail("sdfsdfs");
+        client.setNom("dsfsdfsed");
+        client.setPrenom("sdsfsdf");
+        client.setMdp("sdfsdfsdf");
+
+        Client gardien = new Client();
+        gardien.setAdresse("szfdsdf");
+        gardien.setEmail("sdfsdfs");
+        gardien.setNom("dsfsdfsed");
+        gardien.setPrenom("sdsfsdf");
+        gardien.setMdp("sdfsdfsdf");
+
+        Botaniste botaniste = new Botaniste();
+        botaniste.setAdresse("szfdsdf");
+        botaniste.setEmail("sdfsdfs");
+        botaniste.setNom("dsfsdfsed");
+        botaniste.setPrenom("sdsfsdf");
+        botaniste.setMdp("sdfsdfsdf");
+
+        utilisateurRepository.save(client);
+        utilisateurRepository.save(gardien);
+        utilisateurRepository.save(botaniste);
+
+        Plante plante = new Plante();
+        plante.setPhoto("ssqdfsdf");
+        plante.setNom("sdsfsdf");
+        plante.setType("sdsdf");
+
+        planteRepository.save(plante);
+
+        Contrat contrat = new Contrat();
+        contrat.setClient(client);
+        contrat.setGardien(gardien);
+        contrat.setBotaniste(botaniste);
+        contrat.setDatedebut(LocalDate.of(2023, 1, 1));
+        contrat.setDatefin(LocalDate.of(2023, 1, 3));
+        contrat.setEtat('F');
+
+        contratRepository.save(contrat);
+
+        PlanteAGarder planteagarder = new PlanteAGarder();
+        planteagarder.setPlante(plante);
+        planteagarder.setContrat(contrat);
+        planteagarder.setQuantite(1);
+
+        planteAGarderRepository.save(planteagarder);
     }
 }

@@ -1,50 +1,49 @@
 package com.example.mspr.bo;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "PHOTOJOURNALIERE")
-public class Photojournaliere {
+public class PhotoJournaliere {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_PHOTO", nullable = false)
-    private Integer idPhoto;
+    private Integer id;
 
-    @Column(name = "ID_PLANTEAGARDER", nullable = false)
-    private Integer idPlanteagarder;
+    @Column(name = "LIEN", nullable = false, length = 30)
+    private String lien;
 
-    @Column(name = "LIENPHOTO", length = 128)
-    private String lienphoto;
-
-    @Column(name = "DATEJOUR")
+    @Column(name = "DATEJOUR", nullable = false)
     private LocalDate datejour;
 
-    public Integer getIdPhoto() {
-        return idPhoto;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ID_PLANTEAGARDER", nullable = false)
+    private PlanteAGarder planteAGarder;
+
+    public PlanteAGarder getPlanteAGarder() {
+        return planteAGarder;
     }
 
-    public void setIdPhoto(Integer idPhoto) {
-        this.idPhoto = idPhoto;
+    public void setPlanteAGarder(PlanteAGarder planteAGarder) {
+        this.planteAGarder = planteAGarder;
     }
 
-    public Integer getIdPlanteagarder() {
-        return idPlanteagarder;
+    public Integer getId() {
+        return id;
     }
 
-    public void setIdPlanteagarder(Integer idPlanteagarder) {
-        this.idPlanteagarder = idPlanteagarder;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getLienphoto() {
-        return lienphoto;
+    public String getLien() {
+        return lien;
     }
 
-    public void setLienphoto(String lienphoto) {
-        this.lienphoto = lienphoto;
+    public void setLien(String lien) {
+        this.lien = lien;
     }
 
     public LocalDate getDatejour() {
