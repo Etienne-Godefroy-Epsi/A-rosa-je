@@ -2,66 +2,53 @@ package com.example.mspr.bo;
 
 import jakarta.persistence.*;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 @Entity
 @Table(name = "PLANTE")
 public class Plante {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_PLANTE", nullable = false)
-    private Integer idPlante;
+    private Integer id;
 
-    @Column(name = "NOMPLANTE", length = 128)
-    private String nomplante;
+    @Column(name = "NOM", nullable = false, length = 50)
+    private String nom;
 
-    @Column(name = "TYPEPLANTE", length = 128)
-    private String typeplante;
+    @Column(name = "PHOTO", nullable = false, length = 20)
+    private String photo;
 
-    @Column(name = "PHOTOGENERIC", length = 128)
-    private String photogeneric;
+    @Column(name = "TYPE", nullable = false, length = 50)
+    private String type;
 
-    @OneToMany(mappedBy = "idPlante")
-    private Set<Planteagarder> planteagarders = new LinkedHashSet<>();
-
-    public Integer getIdPlante() {
-        return idPlante;
+    public Integer getId() {
+        return id;
     }
 
-    public void setIdPlante(Integer idPlante) {
-        this.idPlante = idPlante;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getNomplante() {
-        return nomplante;
+    public String getNom() {
+        return nom;
     }
 
-    public void setNomplante(String nomplante) {
-        this.nomplante = nomplante;
+    public void setNom(String nom) {
+        this.nom = nom;
     }
 
-    public String getTypeplante() {
-        return typeplante;
+    public String getPhoto() {
+        return photo;
     }
 
-    public void setTypeplante(String typeplante) {
-        this.typeplante = typeplante;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
-    public String getPhotogeneric() {
-        return photogeneric;
+    public String getType() {
+        return type;
     }
 
-    public void setPhotogeneric(String photogeneric) {
-        this.photogeneric = photogeneric;
-    }
-
-    public Set<Planteagarder> getPlanteagarders() {
-        return planteagarders;
-    }
-
-    public void setPlanteagarders(Set<Planteagarder> planteagarders) {
-        this.planteagarders = planteagarders;
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

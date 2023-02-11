@@ -2,50 +2,47 @@ package com.example.mspr.bo;
 
 import jakarta.persistence.*;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 @Entity
 @Table(name = "PLANTEAGARDER")
-public class Planteagarder {
+public class PlanteAGarder {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_PLANTEAGARDER", nullable = false)
-    private Integer idPlanteagarder;
+    private Integer id;
 
-    @Column(name = "ID_CONTRAT", nullable = false)
-    private Integer idContrat;
-
-    @Column(name = "ID_PLANTE", nullable = false)
-    private Integer idPlante;
-
-    @Column(name = "QUANTITE")
+    @Column(name = "QUANTITE", nullable = false)
     private Integer quantite;
 
-    @OneToMany(mappedBy = "idPlanteagarder")
-    private Set<Photojournaliere> photojournalieres = new LinkedHashSet<>();
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ID_CONTRAT", nullable = false)
+    private Contrat contrat;
 
-    public Integer getIdPlanteagarder() {
-        return idPlanteagarder;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ID_PLANTE", nullable = false)
+    private Plante plante;
+
+    public Plante getPlante() {
+        return plante;
     }
 
-    public void setIdPlanteagarder(Integer idPlanteagarder) {
-        this.idPlanteagarder = idPlanteagarder;
+    public void setPlante(Plante plante) {
+        this.plante = plante;
     }
 
-    public Integer getIdContrat() {
-        return idContrat;
+    public Contrat getContrat() {
+        return contrat;
     }
 
-    public void setIdContrat(Integer idContrat) {
-        this.idContrat = idContrat;
+    public void setContrat(Contrat contrat) {
+        this.contrat = contrat;
     }
 
-    public Integer getIdPlante() {
-        return idPlante;
+    public Integer getId() {
+        return id;
     }
 
-    public void setIdPlante(Integer idPlante) {
-        this.idPlante = idPlante;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getQuantite() {
@@ -54,14 +51,6 @@ public class Planteagarder {
 
     public void setQuantite(Integer quantite) {
         this.quantite = quantite;
-    }
-
-    public Set<Photojournaliere> getPhotojournalieres() {
-        return photojournalieres;
-    }
-
-    public void setPhotojournalieres(Set<Photojournaliere> photojournalieres) {
-        this.photojournalieres = photojournalieres;
     }
 
 }

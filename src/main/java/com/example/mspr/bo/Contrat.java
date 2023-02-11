@@ -3,43 +3,42 @@ package com.example.mspr.bo;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "CONTRAT")
 public class Contrat {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_CONTRAT", nullable = false)
-    private Integer idContrat;
+    private Integer id;
 
-    @Column(name = "DATEDEBUT")
+    @Column(name = "DATEDEBUT", nullable = false)
     private LocalDate datedebut;
 
-    @Column(name = "DATEFIN")
+    @Column(name = "DATEFIN", nullable = false)
     private LocalDate datefin;
 
-    @Column(name = "ETATCONTRAT", length = 32)
-    private String etatcontrat;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ID_CLIENT", nullable = false)
+    private Utilisateur client;
 
-    @Column(name = "ID_CLIENT", nullable = false)
-    private Integer idClient;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ID_GARDIEN", nullable = false)
+    private Utilisateur gardien;
 
-    @Column(name = "ID_GARDIEN", nullable = false)
-    private Integer idGardien;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ID_BOTANISTE")
+    private Utilisateur botaniste;
 
-    @Column(name = "ID_BOTANISTE", nullable = false)
-    private Integer idBotaniste;
+    @Column(name = "ETAT", nullable = false)
+    private Character etat;
 
-    @OneToMany(mappedBy = "idContrat")
-    private Set<Planteagarder> planteagarders = new LinkedHashSet<>();
-
-    public Integer getIdContrat() {
-        return idContrat;
+    public Integer getId() {
+        return id;
     }
 
-    public void setIdContrat(Integer idContrat) {
-        this.idContrat = idContrat;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public LocalDate getDatedebut() {
@@ -58,44 +57,36 @@ public class Contrat {
         this.datefin = datefin;
     }
 
-    public String getEtatcontrat() {
-        return etatcontrat;
+    public Utilisateur getClient() {
+        return client;
     }
 
-    public void setEtatcontrat(String etatcontrat) {
-        this.etatcontrat = etatcontrat;
+    public void setClient(Utilisateur client) {
+        this.client = client;
     }
 
-    public Integer getIdClient() {
-        return idClient;
+    public Utilisateur getGardien() {
+        return gardien;
     }
 
-    public void setIdClient(Integer idClient) {
-        this.idClient = idClient;
+    public void setGardien(Utilisateur gardien) {
+        this.gardien = gardien;
     }
 
-    public Integer getIdGardien() {
-        return idGardien;
+    public Utilisateur getBotaniste() {
+        return botaniste;
     }
 
-    public void setIdGardien(Integer idGardien) {
-        this.idGardien = idGardien;
+    public void setBotaniste(Utilisateur botaniste) {
+        this.botaniste = botaniste;
     }
 
-    public Integer getIdBotaniste() {
-        return idBotaniste;
+    public Character getEtat() {
+        return etat;
     }
 
-    public void setIdBotaniste(Integer idBotaniste) {
-        this.idBotaniste = idBotaniste;
-    }
-
-    public Set<Planteagarder> getPlanteagarders() {
-        return planteagarders;
-    }
-
-    public void setPlanteagarders(Set<Planteagarder> planteagarders) {
-        this.planteagarders = planteagarders;
+    public void setEtat(Character etat) {
+        this.etat = etat;
     }
 
 }
