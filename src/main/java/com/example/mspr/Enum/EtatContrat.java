@@ -2,6 +2,7 @@ package com.example.mspr.Enum;
 
 public enum EtatContrat {
 
+    DEMANDE("demande", 'D'),
     SANSBOTANISTE("Sans botaniste", 'S'),
     AVECBOTANISTE("Avec botaniste", 'B'),
     URGENCE("Urgence", 'U'),

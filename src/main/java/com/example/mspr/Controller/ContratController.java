@@ -174,7 +174,7 @@ public class ContratController {
         return new ResponseEntity<>(contratList, HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping("/demande")
     public ResponseEntity<?> newContrat(
             @RequestParam("dateDebut") LocalDate dateDebut,
             @RequestParam("dateFin") LocalDate dateFin,
@@ -191,7 +191,7 @@ public class ContratController {
             contrat.setDatefin(dateFin);
             contrat.setClient(oClient.get());
             contrat.setGardien(oGardien.get());
-            contrat.setEtat(EtatContrat.SANSBOTANISTE.getValue());
+            contrat.setEtat(EtatContrat.DEMANDE.getValue());
 
             contratRepository.save(contrat);
 
@@ -204,6 +204,36 @@ public class ContratController {
         }
     }
 
+    @PutMapping("/demande/accepter/{idContrat}")
+    public ResponseEntity<String> accepteContrat(@PathVariable Integer idContrat) {
+        Optional<Contrat> oContrat = contratRepository.findById(idContrat);
+
+        if (oContrat.isPresent()) {
+            Contrat contratAccepte = oContrat.get();
+            contratAccepte.setEtat(EtatContrat.SANSBOTANISTE.getValue());
+
+            List<Contrat> contratsASupp = contratRepository.findByClient_IdAndDatedebutAndDatefin(contratAccepte.getClient().getId(), contratAccepte.getDatedebut(), contratAccepte.getDatefin());
+            contratRepository.deleteAll(contratsASupp);
+
+            return ResponseEntity.ok().body("SUCCESS");
+        }
+
+        return ResponseEntity.unprocessableEntity().body("Aucun contrat trouvé avec cet ID");
+    }
+
+    @GetMapping("/demande/forClient/{idClient}")
+    public ResponseEntity<List<Contrat>> getDemandeByIdClient(@PathVariable Integer idClient) {
+        List<Contrat> contrats = contratRepository.findByClient_IdAndEtat(idClient, EtatContrat.DEMANDE.getValue());
+
+        return new ResponseEntity<>(contrats, HttpStatus.OK);
+    }
+
+    @GetMapping("/demande/forGardien/{idGardien}")
+    public ResponseEntity<List<Contrat>> getDemandeByIdGardien(@PathVariable Integer idGardien) {
+        List<Contrat> contrats = contratRepository.findByGardien_IdAndEtat(idGardien, EtatContrat.DEMANDE.getValue());
+
+        return new ResponseEntity<>(contrats, HttpStatus.OK);
+    }
 
     @PutMapping("{id}/ajoutBotaniste")
     public ResponseEntity<?> addBotaniste(@PathVariable("id") Integer idContrat, @RequestParam("idBotaniste") Integer idBotaniste) {
