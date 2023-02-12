@@ -2,14 +2,17 @@ package com.example.mspr.Controller;
 
 import com.example.mspr.Enum.EtatContrat;
 import com.example.mspr.Repository.BotanisteRepository;
+import com.example.mspr.Repository.ClientRepository;
 import com.example.mspr.Repository.ContratRepository;
 import com.example.mspr.bo.Botaniste;
+import com.example.mspr.bo.Client;
 import com.example.mspr.bo.Contrat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -24,6 +27,9 @@ public class ContratController {
 
     @Autowired
     private BotanisteRepository botanisteRepository;
+
+    @Autowired
+    private ClientRepository clientRepository;
 
     @GetMapping("/{id}")
     public ResponseEntity<Contrat> getContratById(@PathVariable("id") Integer idContrat) {
@@ -167,15 +173,45 @@ public class ContratController {
         return new ResponseEntity<>(contratList, HttpStatus.OK);
     }
 
+    @PostMapping("/")
+    public ResponseEntity<?> newContrat(
+            @RequestParam("dateDebut") LocalDate dateDebut,
+            @RequestParam("dateFin") LocalDate dateFin,
+            @RequestParam("idClient") Integer idClient,
+            @RequestParam("idGardien") Integer idGardien) {
+
+        Optional<Client> oClient = clientRepository.findById(idClient);
+        Optional<Client> oGardien = clientRepository.findById(idGardien);
+
+        if (oClient.isPresent() && oGardien.isPresent()) {
+            Contrat contrat = new Contrat();
+
+            contrat.setDatedebut(dateDebut);
+            contrat.setDatefin(dateFin);
+            contrat.setClient(oClient.get());
+            contrat.setGardien(oGardien.get());
+            contrat.setEtat(EtatContrat.SANSBOTANISTE.getValue());
+
+            contratRepository.save(contrat);
+
+            return ResponseEntity.ok().body("SUCCESS");
+        } else {
+            String body = oClient.isEmpty() ? "Aucun client trouvé pour cet id \n" : "";
+            body += oGardien.isEmpty() ? "Aucun gardien trouvé pour cet id \n" : "";
+
+            return ResponseEntity.unprocessableEntity().body(body);
+        }
+    }
+
+
     @PutMapping("{id}/ajoutBotaniste")
     public ResponseEntity<?> addBotaniste(@PathVariable("id") Integer idContrat, @RequestParam("idBotaniste") Integer idBotaniste) {
 
-        Contrat contrat;
         Optional<Contrat> oContrat = contratRepository.findById(idContrat);
         Optional<Botaniste> oBotaniste = botanisteRepository.findById(idBotaniste);
 
         if (oContrat.isPresent() && oBotaniste.isPresent()) {
-            contrat = oContrat.get();
+            Contrat contrat = oContrat.get();
             contrat.setBotaniste(oBotaniste.get());
 
             contratRepository.save(contrat);
@@ -187,6 +223,18 @@ public class ContratController {
 
             return ResponseEntity.unprocessableEntity().body(body);
         }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteContrat(@PathVariable("id") Integer idContrat) {
+
+        try {
+            contratRepository.deleteById(idContrat);
+        } catch (Exception e) {
+            return ResponseEntity.unprocessableEntity().body("Aucun contrat trouvé pour cet id");
+        }
+
+        return ResponseEntity.ok().body("SUCCESS");
     }
 
     public Collection<Character> getEtatSansBotaniste() {

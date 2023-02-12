@@ -26,14 +26,14 @@ public class Contrat {
     @JoinColumn(name = "ID_GARDIEN", nullable = false)
     private Utilisateur gardien;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_BOTANISTE")
     private Utilisateur botaniste;
 
     /**
      * Different etat d'un contrat
-     * S : Sans Botanique mais sans urgence
-     * U : Sans Botanique mais avec urgence
+     * S : Sans Botanique, mais sans urgence
+     * U : Sans Botanique, mais avec urgence
      * B : Avec Botanique
      * T : Contrat terminé
      */
