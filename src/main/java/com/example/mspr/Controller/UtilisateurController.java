@@ -7,6 +7,7 @@ import com.example.mspr.Repository.UtilisateurRepository;
 import com.example.mspr.bo.Botaniste;
 import com.example.mspr.bo.Client;
 import com.example.mspr.bo.Utilisateur;
+import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:8080", maxAge = 3600)
 @RestController
 @RequestMapping("/users")
 public class UtilisateurController {
@@ -44,14 +46,17 @@ public class UtilisateurController {
         Client client = new Client();
         client.setNom(nom);
         client.setPrenom(prenom);
-        client.setMdp(mdp);
+
+        BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
+        client.setMdp(passwordEncryptor.encryptPassword(mdp));
+
         client.setAdresse(adresse);
         client.setEmail(email);
         client.setEtat(EtatClient.DISPONIBLE.getValue());
 
         clientRepository.save(client);
 
-        return ResponseEntity.ok().body("SUCCESS");
+        return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
     }
 
     @PostMapping("/botaniste/inscription")
@@ -65,7 +70,10 @@ public class UtilisateurController {
         Botaniste botaniste = new Botaniste();
         botaniste.setNom(nom);
         botaniste.setPrenom(prenom);
-        botaniste.setMdp(mdp);
+
+        BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
+        botaniste.setMdp(passwordEncryptor.encryptPassword(mdp));
+
         botaniste.setAdresse(adresse);
         botaniste.setEmail(email);
 
@@ -79,9 +87,11 @@ public class UtilisateurController {
             @RequestParam("email") String email,
             @RequestParam("mdp") String mdp
     ) {
-        Optional<Utilisateur> oUtilisateur = utilisateurRepository.findByEmailAndMdp(email, mdp);
 
-        if (oUtilisateur.isPresent()) {
+        BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
+        Optional<Utilisateur> oUtilisateur = utilisateurRepository.findByEmail(email);
+
+        if (oUtilisateur.isPresent() && passwordEncryptor.checkPassword(mdp, oUtilisateur.get().getMdp())) {
             Utilisateur utilisateur = oUtilisateur.get();
             if (utilisateur instanceof Client client) {
                 return new ResponseEntity<>(client, HttpStatus.OK);
@@ -124,7 +134,10 @@ public class UtilisateurController {
 
             utilisateur.setNom(nom);
             utilisateur.setPrenom(prenom);
-            utilisateur.setMdp(mdp);
+
+            BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
+            utilisateur.setMdp(passwordEncryptor.encryptPassword(mdp));
+
             utilisateur.setAdresse(adresse);
             utilisateur.setEmail(email);
             utilisateur.setDescription(description);
