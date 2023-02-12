@@ -1,6 +1,6 @@
 package com.example.mspr.Controller;
 
-import com.example.mspr.Enum.EtatUtilisateur;
+import com.example.mspr.Enum.EtatClient;
 import com.example.mspr.Repository.BotanisteRepository;
 import com.example.mspr.Repository.ClientRepository;
 import com.example.mspr.Repository.UtilisateurRepository;
@@ -10,16 +10,13 @@ import com.example.mspr.bo.Utilisateur;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UtilisateurController {
 
     @Autowired
@@ -43,6 +40,47 @@ public class UtilisateurController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateUser(
+            @PathVariable("id") Integer idUtilisateur,
+            @RequestParam("nom") String nom,
+            @RequestParam("prenom") String prenom,
+            @RequestParam("mdp") String mdp,
+            @RequestParam("adresse") String adresse,
+            @RequestParam("email") String email,
+            @RequestParam("description") String description) {
+
+        Optional<Utilisateur> oUtilisateur = utilisateurRepository.findById(idUtilisateur);
+
+        if (oUtilisateur.isPresent()) {
+            Utilisateur utilisateur = oUtilisateur.get();
+
+            utilisateur.setNom(nom);
+            utilisateur.setPrenom(prenom);
+            utilisateur.setMdp(mdp);
+            utilisateur.setAdresse(adresse);
+            utilisateur.setEmail(email);
+            utilisateur.setDescription(description);
+
+            utilisateurRepository.save(utilisateur);
+
+            return ResponseEntity.ok().body("SUCCESS");
+        } else {
+            return ResponseEntity.unprocessableEntity().body("Aucun utilisateur trouvé pour cet id");
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUtilisateur(@PathVariable("id") Integer idUtilisateur) {
+        try {
+            utilisateurRepository.deleteById(idUtilisateur);
+        } catch (Exception e) {
+            return ResponseEntity.unprocessableEntity().body("Aucun contrat trouvé pour cet id");
+        }
+
+        return ResponseEntity.ok().body("SUCCESS");
     }
 
     @GetMapping("/client/{id}")
@@ -76,7 +114,7 @@ public class UtilisateurController {
     @GetMapping("/gardien/disponible")
     public ResponseEntity<List<Client>> getGardienDispo() {
 
-        List<Client> clientList = clientRepository.findByEtat(EtatUtilisateur.DISPONIBLE.getValue());
+        List<Client> clientList = clientRepository.findByEtat(EtatClient.DISPONIBLE.getValue());
 
         return new ResponseEntity<>(clientList, HttpStatus.OK);
     }
@@ -84,10 +122,33 @@ public class UtilisateurController {
     @GetMapping("/gardien/indisponible")
     public ResponseEntity<List<Client>> getGardienIndispo() {
 
-        List<Client> clientList = clientRepository.findByEtat(EtatUtilisateur.INDISPONIBLE.getValue());
+        List<Client> clientList = clientRepository.findByEtat(EtatClient.INDISPONIBLE.getValue());
 
         return new ResponseEntity<>(clientList, HttpStatus.OK);
     }
 
+    @PutMapping("/client/{id}/disponibilite")
+    public ResponseEntity<?> updateDispoClient(
+            @PathVariable("id") Integer idClient,
+            @RequestParam("dispo") Character dispo) {
+
+        Optional<Client> oClient = clientRepository.findById(idClient);
+
+        dispo = Character.toUpperCase(dispo);
+
+        if (oClient.isPresent() && EtatClient.isEtatClient(dispo)) {
+            Client client = oClient.get();
+
+            client.setEtat(dispo);
+
+            clientRepository.save(client);
+
+            return ResponseEntity.ok().body("SUCCESS");
+        } else {
+            String body = oClient.isEmpty() ? "Aucun client trouvé pour cet id\n" : "";
+            body += !EtatClient.isEtatClient(dispo) ? "Etat incorrect" : "";
+            return ResponseEntity.unprocessableEntity().body(body);
+        }
+    }
 
 }

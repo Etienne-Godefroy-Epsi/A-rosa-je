@@ -1,7 +1,7 @@
 package com.example.mspr;
 
+import com.example.mspr.Enum.EtatClient;
 import com.example.mspr.Enum.EtatContrat;
-import com.example.mspr.Enum.EtatUtilisateur;
 import com.example.mspr.Repository.ContratRepository;
 import com.example.mspr.Repository.PlanteAGarderRepository;
 import com.example.mspr.Repository.PlanteRepository;
@@ -39,7 +39,7 @@ public class MsprApplication implements CommandLineRunner {
         client.setNom("dsfsdfsed");
         client.setPrenom("sdsfsdf");
         client.setMdp("sdfsdfsdf");
-        client.setEtat(EtatUtilisateur.INDISPONIBLE.getValue());
+        client.setEtat(EtatClient.INDISPONIBLE.getValue());
 
         Client gardien = new Client();
         gardien.setAdresse("szfdsdf");
@@ -47,7 +47,7 @@ public class MsprApplication implements CommandLineRunner {
         gardien.setNom("dsfsdfsed");
         gardien.setPrenom("sdsfsdf");
         gardien.setMdp("sdfsdfsdf");
-        gardien.setEtat(EtatUtilisateur.DISPONIBLE.getValue());
+        gardien.setEtat(EtatClient.DISPONIBLE.getValue());
 
         Botaniste botaniste = new Botaniste();
         botaniste.setAdresse("szfdsdf");
