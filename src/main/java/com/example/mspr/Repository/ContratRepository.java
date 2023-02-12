@@ -4,6 +4,7 @@ import com.example.mspr.bo.Contrat;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -30,6 +31,8 @@ public interface ContratRepository extends JpaRepository<Contrat, Integer> {
     List<Contrat> findByBotaniste_IdAndEtat(Integer id, Character etat);
 
     List<Contrat> findByBotaniste_IdAndEtatIn(Integer id, Collection<Character> etats);
+
+    List<Contrat> findByClient_IdAndDatedebutAndDatefin(Integer id, LocalDate datedebut, LocalDate datefin);
 
 
 }
