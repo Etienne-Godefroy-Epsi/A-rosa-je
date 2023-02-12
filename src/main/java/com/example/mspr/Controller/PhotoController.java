@@ -26,7 +26,7 @@ public class PhotoController {
     @Autowired
     private PlanteAGarderRepository planteAGarderRepository;
 
-    @PostMapping("/uploadFile")
+    @PostMapping("/uploadPhoto")
     public ResponseEntity<PhotoJournaliere> uploadPhoto(@RequestParam("file") MultipartFile multipartFile) throws IOException {
 
         PhotoService photoService = new PhotoService();
@@ -43,7 +43,7 @@ public class PhotoController {
         return new ResponseEntity<>(photoJournaliere, HttpStatus.OK);
     }
 
-    @GetMapping("/downloadFile/{fileCode}")
+    @GetMapping("/downloadPhoto/{fileCode}")
     public ResponseEntity<?> downloadFile(@PathVariable("fileCode") String fileCode) {
 
         PhotoService photoService = new PhotoService();
