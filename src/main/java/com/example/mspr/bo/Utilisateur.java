@@ -1,10 +1,12 @@
 package com.example.mspr.bo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "TYPE", length = 1)
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Table(name = "UTILISATEUR")
 public class Utilisateur {
     @Id
