@@ -27,6 +27,75 @@ public class UtilisateurController {
 
     @Autowired
     private BotanisteRepository botanisteRepository;
+//
+//    @GetMapping("/clients")
+//    public ResponseEntity<List<Client>> getAllClients() {
+//
+//    }
+
+    @PostMapping("/client/inscription")
+    public ResponseEntity<String> insciptionClient(
+            @RequestParam("nom") String nom,
+            @RequestParam("prenom") String prenom,
+            @RequestParam("mdp") String mdp,
+            @RequestParam("adresse") String adresse,
+            @RequestParam("email") String email,
+            @RequestParam("description") String descritpion
+    ) {
+        Client client = new Client();
+        client.setNom(nom);
+        client.setPrenom(prenom);
+        client.setMdp(mdp);
+        client.setAdresse(adresse);
+        client.setEmail(email);
+        client.setDescription(descritpion);
+        client.setEtat(EtatClient.DISPONIBLE.getValue());
+
+        clientRepository.save(client);
+
+        return ResponseEntity.ok().body("SUCCESS");
+    }
+
+    @PostMapping("/botaniste/inscription")
+    public ResponseEntity<String> insciptionBotaniste(
+            @RequestParam("nom") String nom,
+            @RequestParam("prenom") String prenom,
+            @RequestParam("mdp") String mdp,
+            @RequestParam("adresse") String adresse,
+            @RequestParam("email") String email,
+            @RequestParam("description") String descritpion
+    ) {
+        Botaniste botaniste = new Botaniste();
+        botaniste.setNom(nom);
+        botaniste.setPrenom(prenom);
+        botaniste.setMdp(mdp);
+        botaniste.setAdresse(adresse);
+        botaniste.setEmail(email);
+        botaniste.setDescription(descritpion);
+
+        botanisteRepository.save(botaniste);
+
+        return ResponseEntity.ok().body("SUCCESS");
+    }
+
+    @PostMapping("/connexion")
+    public ResponseEntity<Utilisateur> connexion(
+            @RequestParam("email") String email,
+            @RequestParam("mdp") String mdp
+    ) {
+        Optional<Utilisateur> oUtilisateur = utilisateurRepository.findByEmailAndMdp(email, mdp);
+
+        if (oUtilisateur.isPresent()) {
+            Utilisateur utilisateur = oUtilisateur.get();
+            if (utilisateur instanceof Client client) {
+                return new ResponseEntity<>(client, HttpStatus.OK);
+            } else if (utilisateur instanceof Botaniste botaniste) {
+                return new ResponseEntity<>(botaniste, HttpStatus.OK);
+            }
+        }
+
+        return ResponseEntity.notFound().build();
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Utilisateur> getUtilisateurById(@PathVariable("id") Integer idUtilisateur) {

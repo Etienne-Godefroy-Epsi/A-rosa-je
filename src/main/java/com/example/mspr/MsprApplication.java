@@ -41,6 +41,14 @@ public class MsprApplication implements CommandLineRunner {
         client.setMdp("sdfsdfsdf");
         client.setEtat(EtatClient.INDISPONIBLE.getValue());
 
+        Client client2 = new Client();
+        client2.setAdresse("szfdsdf");
+        client2.setEmail("sdfsdfs");
+        client2.setNom("dsfsdfsed");
+        client2.setPrenom("sdsfsdf");
+        client2.setMdp("sdfsdfsdf");
+        client2.setEtat(EtatClient.INDISPONIBLE.getValue());
+
         Client gardien = new Client();
         gardien.setAdresse("szfdsdf");
         gardien.setEmail("sdfsdfs");
@@ -57,6 +65,7 @@ public class MsprApplication implements CommandLineRunner {
         botaniste.setMdp("sdfsdfsdf");
 
         utilisateurRepository.save(client);
+        utilisateurRepository.save(client2);
         utilisateurRepository.save(gardien);
         utilisateurRepository.save(botaniste);
 
