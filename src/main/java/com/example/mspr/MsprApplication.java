@@ -34,17 +34,17 @@ public class MsprApplication implements CommandLineRunner {
     public void run(String... args) {
 
         Client client = new Client();
-        client.setAdresse("szfdsdf");
+        client.setAdresse("lyon");
         client.setEmail("sdfsdfs");
         client.setNom("dsfsdfsed");
         client.setPrenom("sdsfsdf");
         client.setMdp("sdfsdfsdf");
-        client.setEtat(EtatClient.INDISPONIBLE.getValue());
+        client.setEtat(EtatClient.DISPONIBLE.getValue());
 
         Client gardien = new Client();
-        gardien.setAdresse("szfdsdf");
+        gardien.setAdresse("nantes");
         gardien.setEmail("sdfsdfs");
-        gardien.setNom("dsfsdfsed");
+        gardien.setNom("okkjaimebien");
         gardien.setPrenom("sdsfsdf");
         gardien.setMdp("sdfsdfsdf");
         gardien.setEtat(EtatClient.DISPONIBLE.getValue());
