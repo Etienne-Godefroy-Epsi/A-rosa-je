@@ -26,7 +26,7 @@ public class Utilisateur {
     @Column(name = "ADRESSE", nullable = false, length = 100)
     private String adresse;
 
-    @Column(name = "EMAIL", nullable = false, length = 25)
+    @Column(name = "EMAIL", nullable = false, length = 50, unique = true)
     private String email;
 
     @Lob

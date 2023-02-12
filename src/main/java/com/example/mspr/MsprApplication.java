@@ -35,7 +35,7 @@ public class MsprApplication implements CommandLineRunner {
 
         Client client = new Client();
         client.setAdresse("szfdsdf");
-        client.setEmail("sdfsdfs");
+        client.setEmail("sdfsdfs1");
         client.setNom("dsfsdfsed");
         client.setPrenom("sdsfsdf");
         client.setMdp("sdfsdfsdf");
@@ -43,7 +43,7 @@ public class MsprApplication implements CommandLineRunner {
 
         Client client2 = new Client();
         client2.setAdresse("szfdsdf");
-        client2.setEmail("sdfsdfs");
+        client2.setEmail("sdfsdfs2");
         client2.setNom("dsfsdfsed");
         client2.setPrenom("sdsfsdf");
         client2.setMdp("sdfsdfsdf");
@@ -51,7 +51,7 @@ public class MsprApplication implements CommandLineRunner {
 
         Client gardien = new Client();
         gardien.setAdresse("szfdsdf");
-        gardien.setEmail("sdfsdfs");
+        gardien.setEmail("sdfsdfs3");
         gardien.setNom("dsfsdfsed");
         gardien.setPrenom("sdsfsdf");
         gardien.setMdp("sdfsdfsdf");
@@ -59,7 +59,7 @@ public class MsprApplication implements CommandLineRunner {
 
         Botaniste botaniste = new Botaniste();
         botaniste.setAdresse("szfdsdf");
-        botaniste.setEmail("sdfsdfs");
+        botaniste.setEmail("sdfsdfs4");
         botaniste.setNom("dsfsdfsed");
         botaniste.setPrenom("sdsfsdf");
         botaniste.setMdp("sdfsdfsdf");

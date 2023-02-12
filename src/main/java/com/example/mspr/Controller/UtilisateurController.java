@@ -79,7 +79,7 @@ public class UtilisateurController {
     }
 
     @PostMapping("/connexion")
-    public ResponseEntity<Utilisateur> connexion(
+    public ResponseEntity<?> connexion(
             @RequestParam("email") String email,
             @RequestParam("mdp") String mdp
     ) {
@@ -94,7 +94,7 @@ public class UtilisateurController {
             }
         }
 
-        return ResponseEntity.notFound().build();
+        return new ResponseEntity<>("Aucun utilisateur trouvé pour ses identifiant", HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/{id}")

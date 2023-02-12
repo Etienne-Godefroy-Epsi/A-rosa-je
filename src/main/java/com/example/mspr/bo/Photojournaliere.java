@@ -12,7 +12,7 @@ public class PhotoJournaliere {
     @Column(name = "ID_PHOTO", nullable = false)
     private Integer id;
 
-    @Column(name = "LIEN", nullable = false, length = 30)
+    @Column(name = "LIEN", nullable = false, length = 30, unique = true)
     private String lien;
 
     @Column(name = "DATEJOUR", nullable = false)
