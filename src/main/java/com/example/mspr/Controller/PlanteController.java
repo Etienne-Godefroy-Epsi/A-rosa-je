@@ -84,8 +84,11 @@ public class PlanteController {
         }
     }
 
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<String> deletePlante(@PathVariable("id") Integer idPlante){
-//
-//    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletePlante(@PathVariable("id") Integer idPlante) {
+
+        planteRepository.deleteById(idPlante);
+
+        return ResponseEntity.ok().body("SUCCESS");
+    }
 }
