@@ -39,8 +39,7 @@ public class UtilisateurController {
             @RequestParam("prenom") String prenom,
             @RequestParam("mdp") String mdp,
             @RequestParam("adresse") String adresse,
-            @RequestParam("email") String email,
-            @RequestParam("description") String descritpion
+            @RequestParam("email") String email
     ) {
         Client client = new Client();
         client.setNom(nom);
@@ -48,7 +47,6 @@ public class UtilisateurController {
         client.setMdp(mdp);
         client.setAdresse(adresse);
         client.setEmail(email);
-        client.setDescription(descritpion);
         client.setEtat(EtatClient.DISPONIBLE.getValue());
 
         clientRepository.save(client);
@@ -62,8 +60,7 @@ public class UtilisateurController {
             @RequestParam("prenom") String prenom,
             @RequestParam("mdp") String mdp,
             @RequestParam("adresse") String adresse,
-            @RequestParam("email") String email,
-            @RequestParam("description") String descritpion
+            @RequestParam("email") String email
     ) {
         Botaniste botaniste = new Botaniste();
         botaniste.setNom(nom);
@@ -71,7 +68,6 @@ public class UtilisateurController {
         botaniste.setMdp(mdp);
         botaniste.setAdresse(adresse);
         botaniste.setEmail(email);
-        botaniste.setDescription(descritpion);
 
         botanisteRepository.save(botaniste);
 
