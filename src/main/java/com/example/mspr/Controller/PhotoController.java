@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/photo")
 public class PhotoController {
