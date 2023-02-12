@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:8080", maxAge = 3600)
 @RestController
 @RequestMapping("/users")
 public class UtilisateurController {
@@ -35,6 +34,7 @@ public class UtilisateurController {
 //
 //    }
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @PostMapping("/client/inscription")
     public ResponseEntity<String> insciptionClient(
             @RequestParam("nom") String nom,
