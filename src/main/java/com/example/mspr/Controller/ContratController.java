@@ -1,15 +1,14 @@
 package com.example.mspr.Controller;
 
 import com.example.mspr.Enum.EtatContrat;
+import com.example.mspr.Repository.BotanisteRepository;
 import com.example.mspr.Repository.ContratRepository;
+import com.example.mspr.bo.Botaniste;
 import com.example.mspr.bo.Contrat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,11 +16,14 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/contrat")
+@RequestMapping("/contrats")
 public class ContratController {
 
     @Autowired
     private ContratRepository contratRepository;
+
+    @Autowired
+    private BotanisteRepository botanisteRepository;
 
     @GetMapping("/{id}")
     public ResponseEntity<Contrat> getContratById(@PathVariable("id") Integer idContrat) {
@@ -163,6 +165,28 @@ public class ContratController {
         List<Contrat> contratList = contratRepository.findByBotaniste_IdAndEtat(idBotaniste, EtatContrat.TERMINE.getValue());
 
         return new ResponseEntity<>(contratList, HttpStatus.OK);
+    }
+
+    @PutMapping("{id}/ajoutBotaniste")
+    public ResponseEntity<?> addBotaniste(@PathVariable("id") Integer idContrat, @RequestParam("idBotaniste") Integer idBotaniste) {
+
+        Contrat contrat;
+        Optional<Contrat> oContrat = contratRepository.findById(idContrat);
+        Optional<Botaniste> oBotaniste = botanisteRepository.findById(idBotaniste);
+
+        if (oContrat.isPresent() && oBotaniste.isPresent()) {
+            contrat = oContrat.get();
+            contrat.setBotaniste(oBotaniste.get());
+
+            contratRepository.save(contrat);
+
+            return ResponseEntity.ok().body("SUCCESS");
+        } else {
+            String body = oContrat.isEmpty() ? "Aucun contrat trouvé avec cet id \n" : "";
+            body += oBotaniste.isEmpty() ? "Aucun botaniste trouvé avec cet id" : "";
+
+            return ResponseEntity.unprocessableEntity().body(body);
+        }
     }
 
     public Collection<Character> getEtatSansBotaniste() {
