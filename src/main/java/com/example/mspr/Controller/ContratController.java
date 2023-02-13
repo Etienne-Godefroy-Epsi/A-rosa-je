@@ -235,8 +235,8 @@ public class ContratController {
         return new ResponseEntity<>(contrats, HttpStatus.OK);
     }
 
-    @PutMapping("{id}/ajoutBotaniste")
-    public ResponseEntity<?> addBotaniste(@PathVariable("id") Integer idContrat, @RequestParam("idBotaniste") Integer idBotaniste) {
+    @PutMapping("{idContrat}/ajoutBotaniste/{idBotaniste}")
+    public ResponseEntity<?> addBotaniste(@PathVariable Integer idContrat, @PathVariable Integer idBotaniste) {
 
         Optional<Contrat> oContrat = contratRepository.findById(idContrat);
         Optional<Botaniste> oBotaniste = botanisteRepository.findById(idBotaniste);
