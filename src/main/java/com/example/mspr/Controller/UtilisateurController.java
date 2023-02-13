@@ -52,7 +52,7 @@ public class UtilisateurController {
 
         client.setAdresse(adresse);
         client.setEmail(email);
-        client.setEtat(EtatClient.INDISPONIBLE.getValue());
+        client.setEtat(EtatClient.DISPONIBLE.getValue());
 
         clientRepository.save(client);
 
