@@ -182,8 +182,6 @@ public class ContratController {
 
     @PostMapping("/demande")
     public ResponseEntity<?> newContrat(
-            @RequestParam("dateDebut") LocalDate dateDebut,
-            @RequestParam("dateFin") LocalDate dateFin,
             @RequestParam("idClient") Integer idClient,
             @RequestParam("idGardien") Integer idGardien) {
 
@@ -193,8 +191,8 @@ public class ContratController {
         if (oClient.isPresent() && oGardien.isPresent()) {
             Contrat contrat = new Contrat();
 
-            contrat.setDatedebut(dateDebut);
-            contrat.setDatefin(dateFin);
+            contrat.setDatedebut(LocalDate.of(2023, 1, 1));
+            contrat.setDatefin(LocalDate.of(2023, 1, 30));
             contrat.setClient(oClient.get());
             contrat.setGardien(oGardien.get());
             contrat.setEtat(EtatContrat.DEMANDE.getValue());
