@@ -72,6 +72,12 @@ public class ContratController {
         return new ResponseEntity<>(contratList, HttpStatus.OK);
     }
 
+    @GetMapping("/forUser/{idUtilisateur}")
+    public ResponseEntity<List<Contrat>> getContratsForUtilisateur(@PathVariable Integer idUtilisateur){
+        List<Contrat> contrats = contratRepository.findByClient_IdOrGardien_IdOrBotaniste_Id(idUtilisateur, idUtilisateur, idUtilisateur);
+
+        return new ResponseEntity<>(contrats, HttpStatus.OK);
+    }
     @GetMapping("/forClient/{id}")
     public ResponseEntity<List<Contrat>> getContratsForClient(@PathVariable("id") Integer idClient) {
 

@@ -10,6 +10,7 @@ import java.util.List;
 
 @Repository
 public interface ContratRepository extends JpaRepository<Contrat, Integer> {
+    List<Contrat> findByClient_IdOrGardien_IdOrBotaniste_Id(Integer id, Integer id1, Integer id2);
     List<Contrat> findByEtatIn(Collection<Character> etats);
 
     List<Contrat> findByEtat(Character etat);
