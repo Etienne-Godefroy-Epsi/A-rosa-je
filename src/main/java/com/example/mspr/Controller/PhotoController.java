@@ -2,8 +2,10 @@ package com.example.mspr.Controller;
 
 import com.example.mspr.Repository.PhotoRepository;
 import com.example.mspr.Repository.PlanteAGarderRepository;
+import com.example.mspr.Repository.PlanteRepository;
 import com.example.mspr.Service.PhotoService;
 import com.example.mspr.bo.PhotoJournaliere;
+import com.example.mspr.bo.Plante;
 import com.example.mspr.bo.PlanteAGarder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -16,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -29,6 +30,9 @@ public class PhotoController {
 
     @Autowired
     private PlanteAGarderRepository planteAGarderRepository;
+
+    @Autowired
+    private PlanteRepository planteRepository;
 
     @PostMapping("/uploadPhoto")
     public ResponseEntity<PhotoJournaliere> uploadPhoto(@RequestParam("file") MultipartFile multipartFile) throws IOException {
@@ -47,7 +51,7 @@ public class PhotoController {
         return new ResponseEntity<>(photoJournaliere, HttpStatus.OK);
     }
 
-    @GetMapping("/downloadPhoto/{idPlanteAGarder}")
+    @GetMapping("/downloadPhoto/journalière/{idPlanteAGarder}")
     public ResponseEntity<?> downloadFile(@PathVariable Integer idPlanteAGarder) {
 
         PhotoService photoService = new PhotoService();
@@ -56,24 +60,64 @@ public class PhotoController {
 
         Optional<PlanteAGarder> oPlanteAGarder = planteAGarderRepository.findById(idPlanteAGarder);
 
-        String fileCode = "";
-        try {
-            resource = photoService.downloadingPhoto(fileCode);
-        } catch (IOException e) {
-            return ResponseEntity.internalServerError().build();
+        if (oPlanteAGarder.isPresent()) {
+            String fileName = oPlanteAGarder.get().getPlante().getPhoto();
+
+            try {
+                resource = photoService.downloadingPhoto(fileName);
+            } catch (IOException e) {
+                return ResponseEntity.internalServerError().build();
+            }
+
+            if (resource == null) {
+                return new ResponseEntity<>("File not found", HttpStatus.NOT_FOUND);
+            }
+
+            String contentType = "application/octet-stream";
+            String headerValue = "attachment; filename=\"" + resource.getFilename() + "\"";
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, headerValue)
+                    .body(resource);
         }
 
-        if (resource == null) {
-            return new ResponseEntity<>("File not found", HttpStatus.NOT_FOUND);
-        }
-
-        String contentType = "application/octet-stream";
-        String headerValue = "attachment; filename=\"" + resource.getFilename() + "\"";
-
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, headerValue)
-                .body(resource);
+        return ResponseEntity.unprocessableEntity().body("Aucune plante à garder trouvé avec cet ID");
     }
+
+    @GetMapping("/downloadPhoto/plante/{idPlante}")
+    public ResponseEntity<?> downloadPhotoPlante(@PathVariable Integer idPlante) {
+
+        PhotoService photoService = new PhotoService();
+
+        Resource resource;
+
+        Optional<Plante> oPlante = planteRepository.findById(idPlante);
+
+        if (oPlante.isPresent()) {
+            String fileName = oPlante.get().getPhoto();
+
+            try {
+                resource = photoService.downloadingPhoto(fileName);
+            } catch (IOException e) {
+                return ResponseEntity.internalServerError().build();
+            }
+
+            if (resource == null) {
+                return new ResponseEntity<>("File not found", HttpStatus.NOT_FOUND);
+            }
+
+            String contentType = "application/octet-stream";
+            String headerValue = "attachment; filename=\"" + resource.getFilename() + "\"";
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, headerValue)
+                    .body(resource);
+        }
+
+        return ResponseEntity.unprocessableEntity().body("Aucune plante à garder trouvé avec cet ID");
+    }
+
+
 }

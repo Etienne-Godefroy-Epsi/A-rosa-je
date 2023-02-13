@@ -4,9 +4,11 @@ import com.example.mspr.Enum.EtatContrat;
 import com.example.mspr.Repository.BotanisteRepository;
 import com.example.mspr.Repository.ClientRepository;
 import com.example.mspr.Repository.ContratRepository;
+import com.example.mspr.Repository.PlanteAGarderRepository;
 import com.example.mspr.bo.Botaniste;
 import com.example.mspr.bo.Client;
 import com.example.mspr.bo.Contrat;
+import com.example.mspr.bo.PlanteAGarder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,8 @@ public class ContratController {
 
     @Autowired
     private ClientRepository clientRepository;
+    @Autowired
+    private PlanteAGarderRepository planteAGarderRepository;
 
     @GetMapping("/{id}")
     public ResponseEntity<Contrat> getContratById(@PathVariable("id") Integer idContrat) {
@@ -73,11 +77,12 @@ public class ContratController {
     }
 
     @GetMapping("/forUser/{idUtilisateur}")
-    public ResponseEntity<List<Contrat>> getContratsForUtilisateur(@PathVariable Integer idUtilisateur){
+    public ResponseEntity<List<Contrat>> getContratsForUtilisateur(@PathVariable Integer idUtilisateur) {
         List<Contrat> contrats = contratRepository.findByClient_IdOrGardien_IdOrBotaniste_Id(idUtilisateur, idUtilisateur, idUtilisateur);
 
         return new ResponseEntity<>(contrats, HttpStatus.OK);
     }
+
     @GetMapping("/forClient/{id}")
     public ResponseEntity<List<Contrat>> getContratsForClient(@PathVariable("id") Integer idClient) {
 
@@ -263,12 +268,14 @@ public class ContratController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteContrat(@PathVariable("id") Integer idContrat) {
 
-        try {
-            contratRepository.deleteById(idContrat);
-        } catch (Exception e) {
-            return ResponseEntity.unprocessableEntity().body("Aucun contrat trouvé pour cet id");
-        }
 
+        Optional<Contrat> oContrat = contratRepository.findById(idContrat);
+
+        if (oContrat.isPresent()) {
+            List<PlanteAGarder> plantesAGarder = planteAGarderRepository.findByContrat_Id(idContrat);
+            planteAGarderRepository.deleteAll(plantesAGarder);
+            contratRepository.deleteById(idContrat);
+        }
         return ResponseEntity.ok().body("SUCCESS");
     }
 
