@@ -1,8 +1,10 @@
 package com.example.mspr.bo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Table(name = "PLANTE")
 public class Plante {
     @Id

@@ -72,12 +72,24 @@ public class MsprApplication implements CommandLineRunner {
         utilisateurRepository.save(gardien);
         utilisateurRepository.save(botaniste);
 
-        Plante plante = new Plante();
-        plante.setPhoto("ssqdfsdf");
-        plante.setNom("sdsfsdf");
-        plante.setType("sdsdf");
+        Plante plante1 = new Plante();
+        plante1.setPhoto("image1.png");
+        plante1.setNom("Aglaonéma");
+        plante1.setType("Aglaonema");
 
-        planteRepository.save(plante);
+        Plante plante2 = new Plante();
+        plante2.setPhoto("image2.png");
+        plante2.setNom("Aspidistra");
+        plante2.setType("Aspidistra elatior");
+
+        Plante plante3 = new Plante();
+        plante3.setPhoto("image3.png");
+        plante3.setNom("Dieffenbachia");
+        plante3.setType("Dieffenbachia");
+
+        planteRepository.save(plante1);
+        planteRepository.save(plante2);
+        planteRepository.save(plante3);
 
         Contrat contrat = new Contrat();
         contrat.setClient(client);
@@ -87,13 +99,40 @@ public class MsprApplication implements CommandLineRunner {
         contrat.setDatefin(LocalDate.of(2023, 1, 3));
         contrat.setEtat(EtatContrat.AVECBOTANISTE.getValue());
 
+        Contrat contrat1 = new Contrat();
+        contrat1.setClient(gardien);
+        contrat1.setGardien(client);
+        contrat1.setBotaniste(botaniste);
+        contrat1.setDatedebut(LocalDate.of(2023, 1, 1));
+        contrat1.setDatefin(LocalDate.of(2023, 1, 3));
+        contrat1.setEtat(EtatContrat.AVECBOTANISTE.getValue());
+
         contratRepository.save(contrat);
+        contratRepository.save(contrat1);
 
         PlanteAGarder planteagarder = new PlanteAGarder();
-        planteagarder.setPlante(plante);
+        planteagarder.setPlante(plante1);
         planteagarder.setContrat(contrat);
         planteagarder.setQuantite(1);
 
+        PlanteAGarder planteagarder1 = new PlanteAGarder();
+        planteagarder1.setPlante(plante2);
+        planteagarder1.setContrat(contrat);
+        planteagarder1.setQuantite(1);
+
+        PlanteAGarder planteagarder2 = new PlanteAGarder();
+        planteagarder2.setPlante(plante3);
+        planteagarder2.setContrat(contrat1);
+        planteagarder2.setQuantite(1);
+
+        PlanteAGarder planteagarder3 = new PlanteAGarder();
+        planteagarder3.setPlante(plante1);
+        planteagarder3.setContrat(contrat1);
+        planteagarder3.setQuantite(1);
+
         planteAGarderRepository.save(planteagarder);
+        planteAGarderRepository.save(planteagarder1);
+        planteAGarderRepository.save(planteagarder2);
+        planteAGarderRepository.save(planteagarder3);
     }
 }
